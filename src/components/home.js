@@ -14,13 +14,19 @@ export const Home=({childToParent})=>{
 
     Axios.defaults.withCredentials = true;
     useEffect(()=>{
-
+        
         Axios.get("http://localhost:3001/data").then((response)=>{
             setDataUser(response);
         })
     },[])
 
     const randomizer=()=>{return (Math.floor(Math.random() * (Math.floor(Math.random() * (1000)) + 1)) + 1).toString();}
+
+    const copyToClipboard = (str) => {
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText)
+            return navigator.clipboard.writeText(str);
+        return Promise.reject('The Clipboard API is not available.');
+      };
 
     if (dataUser.data) {
         
@@ -49,6 +55,10 @@ export const Home=({childToParent})=>{
                             childToParent(account)
                         }}>Edit</Link>
                         <a href={account.link} role="button" className="btn btn-outline-info">Ir</a>
+                        <button type="button" className="btn btn-outline-success" onClick={()=>{
+                            copyToClipboard(account.nombre+"\n"+account.usuario+"\n"+account.contraseña)
+                            setDeleteMessg("Cuenta Copiada !")
+                        }}>Copy</button>
                     </div>
                     </div>
                     })}

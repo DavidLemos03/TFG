@@ -25,7 +25,7 @@ app.use(session({
     saveUninitialized : false,
     cookie : {
         name : "repokey",
-        maxAge : 86400000
+        maxAge : 86400000 //24h TTL
     }
 }))
 
@@ -132,7 +132,8 @@ app.get("/data",(req,res)=>{
 
 app.use("/update",(req,res)=>{
     
-    db.query("UPDATE `cuentas` SET `usuario`= ?,`contraseña`= ?,`nombre`= ? `link`= ? WHERE `idCuenta`= ?",[req.body.usuario,req.body.passw,req.body.nombre,req.body.id,req.body.link],(err,result)=>{
+    db.query("UPDATE `cuentas` SET `usuario`= ?,`contraseña`= ?,`nombre`= ?, `link`= ? WHERE `idCuenta`= ?",[req.body.usuario,req.body.passw,req.body.nombre,req.body.link,req.body.id],(err,result)=>{
+        
         if(err){
             res.send({message:err})
         }else{
@@ -157,19 +158,11 @@ app.use("/creation",(req,res)=>{
             if(result.length > 0){
                 res.send({message:"Ya existe esa cuenta en ese servicio",fail:true})
             }else{
-                db.query("SELECT COUNT(*) AS 'id' FROM `cuentas`",(err,result)=>{
+                db.query("SELECT `idCuenta` FROM `cuentas` WHERE `idCuenta` = (SELECT MAX(`idCuenta`) FROM `cuentas`)",(err,result)=>{
                     if(err){
                         res.send({message:"Error inesparado",fail:true});
                     }else{
-                        idCuenta = (result[0].id)+Math.floor(Math.random() * (9999)) + 1;
-                        console.log(idCuenta)
-                        db.query("SELECT * FROM `cuentas` WHERE `idCuenta`=?",[idCuenta],(err,result)=>{
-                            if(err){
-                            }else if(result.length > 0 ){
-                                idCuenta = (result[0].id)+ Math.floor(Math.random() * (9999)) + Math.floor(Math.random() * (500)) + 1
-                            }
-                        })
-                        
+                        idCuenta = (result[0].idCuenta)+1;
                         db.query("INSERT INTO `cuentas`(`idCuenta`, `usuario`, `contraseña`, `nombre`, `idCliente`, `link`) VALUES (?,?,?,?,?,?)",[idCuenta,user,passw,name,idAliveUser,link],(err,result)=>{
                             if(err){
                                 res.send({message:"Error en la inserción",fail:true});

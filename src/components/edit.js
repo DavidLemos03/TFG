@@ -9,7 +9,7 @@ function Edit({dataAccount}){
     
     const update = () =>{
         Axios.post("http://localhost:3001/update",{id:dataAccount.idCuenta,nombre:nombreServicio,usuario:usuarioServicio,passw:contraseniaServicio,link:linkServicio}).then((response)=>{
-            console.log(response)
+            console.log(response.message)
         })
     }
    
