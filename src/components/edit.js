@@ -1,6 +1,17 @@
 import Axios  from "axios";
 import React, { useState } from "react";
 
+const makeid= () =>{
+    let result = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!$%&/()=?¿ç*:';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < 20; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+const recomendada = makeid();
+
 function Edit({dataAccount}){
     const [nombreServicio, setNombreServicio] = useState(dataAccount.nombre)
     const [usuarioServicio,setUsuarioServicio] = useState(dataAccount.usuario)
@@ -28,7 +39,7 @@ function Edit({dataAccount}){
                 <h4>Contraseña :</h4>
                 <input type="password" placeholder="Contraseña" onChange={(e)=>{
                     setContraseniaServicio(e.target.value)
-                }} value={contraseniaServicio}></input>
+                }} value={contraseniaServicio}></input><p>Contraseña Recomendada: {recomendada}</p>
                 <h4>Link :</h4>
                 <input type="text" placeholder="url" onChange={(e)=>{
                     setLinkServicio(e.target.value)

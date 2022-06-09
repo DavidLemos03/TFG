@@ -96,11 +96,8 @@ app.use("/erase",(req,res)=>{
 })
 
 app.use('/login', (req,res)=>{
-
-    const username = req.body.username;
-    const password = req.body.password;
-
-    db.query("SELECT * FROM `credenciales` WHERE `usuario`= ? AND `contraseña`= MD5(?)",[username,password],
+    db.query("SELECT * FROM `credenciales` WHERE `usuario`= ? AND `contraseña`= MD5(?)",
+    [req.body.username,req.body.password],
     (err,result)=>{
         if(err){
             res.send({err:err});

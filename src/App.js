@@ -50,7 +50,7 @@ function App(){
         <div className="Header">
           <img src="/logo_repokey.png" alt="logo_repokey"></img>
         </div>
-          <h2>Hola {activeUser}</h2>
+          <h2>Hola {activeUser.toUpperCase()}</h2>
         <Routes>
           <Route path="/" element={<Home childToParent={childToParent} />}></Route>
           <Route path="/create" element={<Create />}></Route>
